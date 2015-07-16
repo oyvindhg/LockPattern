@@ -27,25 +27,21 @@ import static android.hardware.SensorManager.getRotationMatrixFromVector;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+
+
     //Variables used for sensor control
-    private SensorControl mSensorControl;
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
     private int sensorCounter;
-    private float savedValues[][] = new float[2][5];
 
-    private float x;
-    private float y;
     private float xref;
     private float yref;
-    private float xprev = 0;
-    private float yprev = 0;
+    private float xprev;
+    private float yprev;
     int width;
     int height;
 
-    private float rotationM[] = new float[9];
-    float orientation[] = new float[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +63,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         Toast.makeText(this, "My Service START", Toast.LENGTH_SHORT).show();
 
-        mSensorControl = new SensorControl(this);
+        SensorControl mSensorControl = new SensorControl(this);
         mSensorControl.setMode(SensorControl.SENSOR_MODE_HEADSET);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -107,73 +103,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener((SensorEventListener) this);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        sensorCounter = 0;
-        return super.onTouchEvent(event);
-
-    }
-
-    private float avg(float[] array){
-        float sum = 0;
-        for (float elem:array){
-            sum += elem;
-        }
-        return sum / array.length;
-    }
-
-    public void moveCursor(float x, float y){
-        MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
-        cursor.setTranslationX(20 * (x - xref));
-        cursor.setTranslationY(20 * (y - yref));
-
-//        if (cursor.get...)
-    }
-
-    public float[] moveCursorAnim(float x, float y, float xprev, float yprev, float xref, float yref){
-        MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
-
-        AnimatorSet animSetXY = new AnimatorSet();
-
-        ObjectAnimator animY = ObjectAnimator.ofFloat(cursor, "translationY", 20 * (yprev - yref), 20 * (y - yref));
-
-        ObjectAnimator animX = ObjectAnimator.ofFloat(cursor, "translationX", 20 * (xprev - xref), 20 * (x - xref));
-
-        animSetXY.playTogether(animX, animY);
-        animSetXY.setInterpolator(new LinearInterpolator());
-        animSetXY.setDuration(10);
-        animSetXY.start();
-
-        xprev = x;
-        yprev = y;
-
-
-        if (cursor.getX() < 30){
-            xref = x + 20;
-//            Log.d("Getwidth", String.valueOf(Math.toDegrees(width / 2)));
-        }
-        else if (cursor.getX() > width - 120){
-//            Log.d("MainActivity", "xpos: " + cursor.getX() + "width: " + width);
-            xref = x - 20;
-        }
-        else if (cursor.getY() < 0 ){
-            yref = y + 10;
-        }
-        else if (cursor.getY() > height - 50){
-            yref = y - 10;
-        }
-
-        Log.d("MainActivity", "MOUSEFUNC" + xprev);
-
-        return new float[]{xref, yref};
-
-//        Circle.checkHovered(cursor);
-
-
-
-    }
-
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something if accuracy changes?
@@ -182,52 +111,51 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void onSensorChanged(SensorEvent event) {
 
+
+        MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
+
         // check sensor type
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 
+            float rotationM[] = new float[9];
+            float orientation[] = new float[3];
             float rotationVector[] = {event.values[0], event.values[1], event.values[2]};
 
             getRotationMatrixFromVector(rotationM, rotationVector);
-
             SensorManager.remapCoordinateSystem(rotationM, SensorManager.AXIS_X, SensorManager.AXIS_Z, rotationM);
-
             getOrientation(rotationM, orientation);
+            float x = (float) Math.toDegrees(orientation[0]);
+            float y = (float) Math.toDegrees(orientation[1]);
 
-
-            x = (float) Math.toDegrees(orientation[0]);
-            y = (float) Math.toDegrees(orientation[1]);
-
-            if (sensorCounter < 5) {
-                savedValues[0][sensorCounter] = x;
-                savedValues[1][sensorCounter] = y;
-
+            if (sensorCounter == 0) {
+                xref = x;
+                yref = y;
                 sensorCounter++;
             }
             else {
-                if (sensorCounter == 5) {
-                    xref = avg(savedValues[0]);
-                    yref = avg(savedValues[1]);
 
-                    sensorCounter++;
-                }
-                /*
-                if ( (xref > 100 && x < 0)  ){
-                    x = 180 - x;
-                }
-                else if ( (xref < -100 && x > 0))
-                */
+
+//                if ( (xref > 100 && x < 0)  ){
+//                    x = 180 - x;
+//                }
+//                else if ( (xref < -100 && x > 0))
 
 
 //                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
 //                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
 
-                Log.d("MainActivity", "SENSORFUNC" + xprev);
 
-                float[] ref= moveCursorAnim(x, y, xprev, yprev, xref, yref);
+                cursor.moveCursorAnim(x, y, xprev, yprev, xref, yref, width, height);
 
-                xref = ref[0];
-                yref = ref[1];
-
+                if (cursor.getX() < 30) {
+                    xref = x + 20;
+                } else if (cursor.getX() > width - 120) {
+                    xref = x - 20;
+                } else if (cursor.getY() < 0 ){
+                    yref = y + 10;
+                } else if (cursor.getY() > height - 50){
+                    yref = y - 10;
+                }
             }
 
             xprev = x;
