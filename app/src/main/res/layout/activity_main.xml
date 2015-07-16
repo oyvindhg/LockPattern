@@ -95,7 +95,7 @@
         android:src="@drawable/pattern_circle_white" />
 
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.MotionCursor
         android:id="@+id/cursor"
         android:layout_width="80dp"
         android:layout_height="80dp"
