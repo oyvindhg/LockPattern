@@ -1,7 +1,5 @@
 package com.oyvindgul.lockpattern;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -11,12 +9,10 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.oyvindgul.lockpattern.Objects.Circle;
 import com.oyvindgul.lockpattern.Objects.MotionCursor;
 
 import jp.epson.moverio.bt200.SensorControl;
@@ -114,6 +110,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
 
+        Circle circle1 = (Circle) findViewById(R.id.circle1);
+
         // check sensor type
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 
@@ -134,28 +132,37 @@ public class MainActivity extends Activity implements SensorEventListener {
             }
             else {
 
+                if (xref > 90 && x < 0) {
+                    x += 360;
+                } else if (xref < -90 && x > 0) {
+                    x -= 360;
+                }
 
-//                if ( (xref > 100 && x < 0)  ){
-//                    x = 180 - x;
-//                }
-//                else if ( (xref < -100 && x > 0))
+                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
+                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
 
 
-//                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
-//                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
-
-
-                cursor.moveCursorAnim(x, y, xprev, yprev, xref, yref, width, height);
+                cursor.moveCursor(x, y, xprev, yprev, xref, yref, width, height);
 
                 if (cursor.getX() < 30) {
                     xref = x + 20;
                 } else if (cursor.getX() > width - 120) {
                     xref = x - 20;
-                } else if (cursor.getY() < 0 ){
+                } else if (cursor.getY() < 0) {
                     yref = y + 10;
-                } else if (cursor.getY() > height - 50){
+                } else if (cursor.getY() > height - 50) {
                     yref = y - 10;
                 }
+
+                if (x > 180) {
+                    circle1.onTouched();
+                }
+
+//                if circle1.detectOverlap && !pattern.getPatten().contains("1"){
+//                  circle1.onTouched()
+//                }
+
+
             }
 
             xprev = x;
