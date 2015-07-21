@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.oyvindgul.lockpattern.Objects.Circle;
+import com.oyvindgul.lockpattern.Objects.LoginButton;
 import com.oyvindgul.lockpattern.Objects.MotionCursor;
 
 import jp.epson.moverio.bt200.SensorControl;
@@ -109,8 +110,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 
         MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
-
         Circle circle1 = (Circle) findViewById(R.id.circle1);
+        Circle circle2 = (Circle) findViewById(R.id.circle2);
+        Circle circle3 = (Circle) findViewById(R.id.circle3);
+        Circle circle4 = (Circle) findViewById(R.id.circle4);
+        Circle circle5 = (Circle) findViewById(R.id.circle5);
+        Circle circle6 = (Circle) findViewById(R.id.circle6);
+        Circle circle7 = (Circle) findViewById(R.id.circle7);
+        Circle circle8 = (Circle) findViewById(R.id.circle8);
+        LoginButton loginbutton = (LoginButton) findViewById(R.id.loginbutton);
+
 
         // check sensor type
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
@@ -138,8 +147,8 @@ public class MainActivity extends Activity implements SensorEventListener {
                     x -= 360;
                 }
 
-                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
-                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
+//                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
+//                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
 
 
                 cursor.moveCursor(x, y, xprev, yprev, xref, yref, width, height);
@@ -154,13 +163,32 @@ public class MainActivity extends Activity implements SensorEventListener {
                     yref = y - 10;
                 }
 
-                if (x > 180) {
+                if (circle1.cursorTouch(cursor)){
                     circle1.onTouched();
+                } if (circle2.cursorTouch(cursor)){
+                    circle2.onTouched();
+                } if (circle3.cursorTouch(cursor)){
+                    circle3.onTouched();
+                } if (circle4.cursorTouch(cursor)){
+                    circle4.onTouched();
+                } if (circle5.cursorTouch(cursor)){
+                    circle5.onTouched();
+                } if (circle6.cursorTouch(cursor)){
+                    circle6.onTouched();
+                } if (circle7.cursorTouch(cursor)){
+                    circle7.onTouched();
+                } if (circle8.cursorTouch(cursor)){
+                    circle8.onTouched();
                 }
-
-//                if circle1.detectOverlap && !pattern.getPatten().contains("1"){
-//                  circle1.onTouched()
-//                }
+                Toast.makeText(this, "My Service RESUME", Toast.LENGTH_SHORT).show();
+                if (loginbutton.cursorTouch(cursor)){
+                    if (PatternStorage.correctPassword()){
+                        Toast.makeText(this, "Correct! Device unlocked", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(this, "Wrong password! Try again", Toast.LENGTH_SHORT).show();
+                    }
+                }
 
 
             }

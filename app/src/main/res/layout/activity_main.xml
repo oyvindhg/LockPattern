@@ -9,7 +9,7 @@
     tools:context=".MainActivity"
     android:background="@drawable/teal">
 
-    <Button
+    <com.oyvindgul.lockpattern.Objects.LoginButton
         android:id="@+id/loginbutton"
         android:layout_height="70dp"
         android:layout_width="150dp"
@@ -20,6 +20,7 @@
 
     <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle1"
+        android:tag="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -27,8 +28,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle2"
+        android:tag="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -36,8 +38,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle3"
+        android:tag="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -45,8 +48,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle4"
+        android:tag="4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -55,8 +59,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle5"
+        android:tag="5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -65,8 +70,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle6"
+        android:tag="6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -75,8 +81,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle7"
+        android:tag="7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -84,8 +91,9 @@
         android:contentDescription="@null"
         android:src="@drawable/pattern_circle_white" />
 
-    <ImageView
+    <com.oyvindgul.lockpattern.Objects.Circle
         android:id="@+id/circle8"
+        android:tag="8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
