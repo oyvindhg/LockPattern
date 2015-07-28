@@ -10,11 +10,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.oyvindgul.lockpattern.Objects.Circle;
 import com.oyvindgul.lockpattern.Objects.LoginButton;
 import com.oyvindgul.lockpattern.Objects.MotionCursor;
+
+import java.util.Arrays;
+import java.util.List;
 
 import jp.epson.moverio.bt200.SensorControl;
 
@@ -25,32 +29,58 @@ import static android.hardware.SensorManager.getRotationMatrixFromVector;
 public class MainActivity extends Activity implements SensorEventListener {
 
 
-
-    //Variables used for sensor control
     private SensorManager mSensorManager;
     private Sensor mSensor;
 
     private int sensorCounter;
-
+    private int[] circleCounter = new int[8];
+    private int buttonCounter;
     private float xref;
     private float yref;
     private float xprev;
     private float yprev;
-    int width;
-    int height;
+    private int width;
+    private int height;
+
+    private MotionCursor cursor;
+    private Circle c1;
+    private Circle c2;
+    private Circle c3;
+    private Circle c4;
+    private Circle c5;
+    private Circle c6;
+    private Circle c7;
+    private Circle c8;
+    private List<Circle> circleList;
+    private RelativeLayout buttonBgr;
+    private LoginButton loginButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(this, "My Service CREATED", Toast.LENGTH_SHORT).show();
+        setContentView(R.layout.activity_main);
+
+//        Toast.makeText(this, "My Service CREATED", Toast.LENGTH_SHORT).show();
+
+        cursor = (MotionCursor) this.findViewById(R.id.cursor);
+        c1 = (Circle) findViewById(R.id.circle1);
+        c2 = (Circle) findViewById(R.id.circle2);
+        c3 = (Circle) findViewById(R.id.circle3);
+        c4 = (Circle) findViewById(R.id.circle4);
+        c5 = (Circle) findViewById(R.id.circle5);
+        c6 = (Circle) findViewById(R.id.circle6);
+        c7 = (Circle) findViewById(R.id.circle7);
+        c8 = (Circle) findViewById(R.id.circle8);
+        circleList = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8);
+        buttonBgr = (RelativeLayout) findViewById(R.id.buttonbackground);
+        loginButton = (LoginButton) findViewById(R.id.loginbutton);
 
         Display display = getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         height = display.getHeight();
 
-        setContentView(R.layout.activity_main);
 
     }
 
@@ -58,7 +88,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onStart() {
         super.onStart();
 
-        Toast.makeText(this, "My Service START", Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(this, "My Service START", Toast.LENGTH_SHORT).show();
 
         SensorControl mSensorControl = new SensorControl(this);
         mSensorControl.setMode(SensorControl.SENSOR_MODE_HEADSET);
@@ -76,7 +107,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         View myBackground = (View) findViewById(R.id.loginbutton);
         myBackground.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
-        Toast.makeText(this, "My Service RESUME", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "My Service RESUME", Toast.LENGTH_SHORT).show();
 
         mSensorManager.registerListener((SensorEventListener) this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -86,7 +117,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
 
-        Toast.makeText(this, "My Service PAUSE", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "My Service PAUSE", Toast.LENGTH_SHORT).show();
 
         mSensorManager.unregisterListener((SensorEventListener) this);
     }
@@ -95,7 +126,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onStop() {
         super.onStop();
 
-        Toast.makeText(this, "My Service STOP", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "My Service STOP", Toast.LENGTH_SHORT).show();
 
         mSensorManager.unregisterListener((SensorEventListener) this);
     }
@@ -107,19 +138,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     public void onSensorChanged(SensorEvent event) {
-
-
-        MotionCursor cursor = (MotionCursor) findViewById(R.id.cursor);
-        Circle circle1 = (Circle) findViewById(R.id.circle1);
-        Circle circle2 = (Circle) findViewById(R.id.circle2);
-        Circle circle3 = (Circle) findViewById(R.id.circle3);
-        Circle circle4 = (Circle) findViewById(R.id.circle4);
-        Circle circle5 = (Circle) findViewById(R.id.circle5);
-        Circle circle6 = (Circle) findViewById(R.id.circle6);
-        Circle circle7 = (Circle) findViewById(R.id.circle7);
-        Circle circle8 = (Circle) findViewById(R.id.circle8);
-        LoginButton loginbutton = (LoginButton) findViewById(R.id.loginbutton);
-
 
         // check sensor type
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
@@ -150,7 +168,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 //                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
 //                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
 
-
                 cursor.moveCursor(x, y, xprev, yprev, xref, yref, width, height);
 
                 if (cursor.getX() < 30) {
@@ -163,34 +180,52 @@ public class MainActivity extends Activity implements SensorEventListener {
                     yref = y - 10;
                 }
 
-                if (circle1.cursorTouch(cursor)){
-                    circle1.onTouched();
-                } if (circle2.cursorTouch(cursor)){
-                    circle2.onTouched();
-                } if (circle3.cursorTouch(cursor)){
-                    circle3.onTouched();
-                } if (circle4.cursorTouch(cursor)){
-                    circle4.onTouched();
-                } if (circle5.cursorTouch(cursor)){
-                    circle5.onTouched();
-                } if (circle6.cursorTouch(cursor)){
-                    circle6.onTouched();
-                } if (circle7.cursorTouch(cursor)){
-                    circle7.onTouched();
-                } if (circle8.cursorTouch(cursor)){
-                    circle8.onTouched();
-                }
-                Toast.makeText(this, "My Service RESUME", Toast.LENGTH_SHORT).show();
-                if (loginbutton.cursorTouch(cursor)){
-                    if (PatternStorage.correctPassword()){
-                        Toast.makeText(this, "Correct! Device unlocked", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < circleList.size(); i++){
+
+                    if (circleList.get(i).cursorTouch(cursor)){
+                        cursor.fill();
+                        circleCounter[i]++;
+                        if (circleCounter[i]==5){
+                            circleCounter[i] = 0;
+                            circleList.get(i).onTouched();
+                            loginButton.makeVisible();
+                            buttonBgr.setBackgroundColor(0xFF99CCFF);
+                        }
                     }
                     else{
-                        Toast.makeText(this, "Wrong password! Try again", Toast.LENGTH_SHORT).show();
+                        if (circleCounter[i] != 0){
+                            cursor.empty();
+                        }
+                        circleCounter[i] = 0;
                     }
                 }
 
-
+                if (loginButton.cursorTouch(cursor)) {
+                    cursor.fill();
+                    buttonCounter++;
+                    if (buttonCounter == 5) {
+                        buttonCounter = 0;
+                        if (PatternStorage.correctPassword()) {
+                            Toast.makeText(this, "Correct! Device unlocked", Toast.LENGTH_SHORT).show();
+                            loginButton.makeInvisible();
+                            buttonBgr.setBackgroundColor(0x1F99CCFF);
+                        } else {
+                            Toast.makeText(this, "Wrong password! Try again", Toast.LENGTH_SHORT).show();
+                            PatternStorage.resetPattern();
+                            for (int i = 0; i < circleList.size(); i++) {
+                                circleList.get(i).turnWhite();
+                            }
+                            loginButton.makeInvisible();
+                            buttonBgr.setBackgroundColor(0x1F99CCFF);
+                        }
+                    }
+                }
+                else{
+                    if (buttonCounter != 0) {
+                        cursor.empty();
+                        buttonCounter = 0;
+                    }
+                }
             }
 
             xprev = x;
