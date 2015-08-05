@@ -128,7 +128,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something if accuracy changes?
-        Toast.makeText(this, "ACCURACY CHANGED", Toast.LENGTH_SHORT).show();
     }
 
     public void onSensorChanged(SensorEvent event) {
