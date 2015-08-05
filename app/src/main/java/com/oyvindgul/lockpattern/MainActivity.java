@@ -62,7 +62,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         setContentView(R.layout.activity_main);
 
-//        Toast.makeText(this, "My Service CREATED", Toast.LENGTH_SHORT).show();
 
         cursor = (MotionCursor) this.findViewById(R.id.cursor);
         c1 = (Circle) findViewById(R.id.circle1);
@@ -89,8 +88,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onStart();
 
 
-//        Toast.makeText(this, "My Service START", Toast.LENGTH_SHORT).show();
-
         SensorControl mSensorControl = new SensorControl(this);
         mSensorControl.setMode(SensorControl.SENSOR_MODE_HEADSET);
 
@@ -107,7 +104,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         View myBackground = (View) findViewById(R.id.loginbutton);
         myBackground.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
 
-//        Toast.makeText(this, "My Service RESUME", Toast.LENGTH_SHORT).show();
 
         mSensorManager.registerListener((SensorEventListener) this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -117,7 +113,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onPause() {
         super.onPause();
 
-//        Toast.makeText(this, "My Service PAUSE", Toast.LENGTH_SHORT).show();
 
         mSensorManager.unregisterListener((SensorEventListener) this);
     }
@@ -126,7 +121,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onStop() {
         super.onStop();
 
-//        Toast.makeText(this, "My Service STOP", Toast.LENGTH_SHORT).show();
 
         mSensorManager.unregisterListener((SensorEventListener) this);
     }
@@ -165,8 +159,8 @@ public class MainActivity extends Activity implements SensorEventListener {
                     x -= 360;
                 }
 
-//                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
-//                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
+                Log.d("MainActivity", "RotVector: x = " + x + ", y = " + y);
+                Log.d("MainActivity", "RotVector: xref = " + xref + ", yref = " + yref);
 
                 cursor.moveCursor(x, y, xprev, yprev, xref, yref, width, height);
 
@@ -185,11 +179,12 @@ public class MainActivity extends Activity implements SensorEventListener {
                     if (circleList.get(i).cursorTouch(cursor)){
                         cursor.fill();
                         circleCounter[i]++;
-                        if (circleCounter[i]==5){
+                        if (circleCounter[i]==6){
                             circleCounter[i] = 0;
                             circleList.get(i).onTouched();
                             loginButton.makeVisible();
                             buttonBgr.setBackgroundColor(0xFF99CCFF);
+                            cursor.empty();
                         }
                     }
                     else{
@@ -205,6 +200,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                     buttonCounter++;
                     if (buttonCounter == 5) {
                         buttonCounter = 0;
+                        cursor.empty();
                         if (PatternStorage.correctPassword()) {
                             Toast.makeText(this, "Correct! Device unlocked", Toast.LENGTH_SHORT).show();
                             loginButton.makeInvisible();
