@@ -1,6 +1,5 @@
 package com.oyvindgul.lockpattern;
 
-import android.util.Log;
 
 import com.oyvindgul.lockpattern.Objects.Circle;
 
